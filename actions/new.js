@@ -6,7 +6,7 @@ const { PackageManager, PackageManagerFactory } = require('../lib/package-manage
 const { messages } = require('../lib/ui');
 
 module.exports = (args, options, logger) => {
-  logger.debug(chalk.blue('[DEBUG] - new command -'), args, options);
+  validate(options, logger);
   return askForMissingInformation(args, logger)
     .then(() => executeSchematic(args, options, logger))
     .then(() => {
@@ -16,6 +16,17 @@ module.exports = (args, options, logger) => {
     })
     .then((packageManager) => installPackages(packageManager, strings.dasherize(args.name), logger));
 };
+
+function validate(options, logger) {
+  if (options.collection !== undefined && options.schematic === undefined) {
+    logger.error(chalk.red(`You must specify a schematic to execute from your collection : ${ options.collection }`));
+    process.exit(1);
+  }
+  if (options.schematic !== undefined && options.collection === undefined) {
+    logger.error(chalk.red(`You must specify a collection to execute schematic : ${ options.schematic }`));
+    process.exit(1);
+  }
+}
 
 function askForMissingInformation(args, logger) {
   logger.info(chalk.green(messages.PROJECT_INFORMATION_START));

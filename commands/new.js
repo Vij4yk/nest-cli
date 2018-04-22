@@ -6,6 +6,8 @@ module.exports = (program) => {
     .argument('[description]', 'The NestJS application description.')
     .argument('[version]', 'The NesJS application version.')
     .argument('[author]', 'The NestJS application author.')
-    .option('--dry-run', 'allow to test changes before execute command.')
+    .option('--dry-run', 'Allow to test changes before execute command.')
+    .option('--collection <collection>', 'Allow to use your custom schematics collection.')
+    .option('--schematic <schematic>', 'The schematic to run from you custom collection.')
     .action(require('../actions/new'));
 };
